@@ -10,10 +10,13 @@
     <input type="number" id="employee_id" placeholder="Employee ID" required><br>
     <input type="text" id="first_name" placeholder="First Name" required><br>
     <input type="text" id="last_name" placeholder="Last Name" required><br>
+    <input type="email" id="email" placeholder="Email (optional)"><br>
+    <input type="text" id="hire_date" placeholder="Hire Date (DD-MM-YYYY, optional)"><br>
+    <input type="text" id="job_id" placeholder="Job ID (optional)"><br>
     <button type="submit">Update</button>
   </form>
 
-  <a href="employees.html">Back to Employee List</a>
+  <a href="index.html">Employee List</a>
 
   <script>
     const form = document.getElementById("update-form");
@@ -23,21 +26,33 @@
       const empId = document.getElementById("employee_id").value;
       const firstName = document.getElementById("first_name").value;
       const lastName = document.getElementById("last_name").value;
+      const email = document.getElementById("email").value;
+      const hireDate = document.getElementById("hire_date").value;
+      const jobId = document.getElementById("job_id").value;
+
+      const payload = {
+        employee_id: parseInt(empId),
+        first_name: firstName,
+        last_name: lastName
+      };
+
+      if (email) payload.email = email;
+      if (hireDate) payload.hire_date = hireDate;
+      if (jobId) payload.job_id = jobId;
 
       fetch("http://54.179.52.209:5000/api/update_employee", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          employee_id: parseInt(empId),
-          first_name: firstName,
-          last_name: lastName
-        })
+        body: JSON.stringify(payload)
       })
       .then(response => response.json())
       .then(data => {
-        alert(`Employee updated: ${data.first_name} ${data.last_name}`);
-        // Optionally, clear the form after update
-        form.reset();
+        if(data.status === "success"){
+          alert(`Employee updated: ${data.first_name} ${data.last_name}`);
+          form.reset();
+        } else {
+          alert(`Error: ${data.message}`);
+        }
       });
     });
   </script>

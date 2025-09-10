@@ -18,7 +18,7 @@
         const list = document.getElementById("employee-list");
         data.forEach(emp => {
           const li = document.createElement("li");
-          li.textContent = emp.employee_id + " - " + emp.first_name + " " + emp.last_name;
+          li.textContent = emp.employee_id + " - " + emp.first_name + " " + emp.last_name + " " + emp.email + " " + emp.hire_date + " " + emp.job_id;
           list.appendChild(li);
         });
       });

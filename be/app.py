@@ -6,7 +6,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Connection details
-dsn = "54.179.52.209:1521/XEPDB1"
+dsn = "oracle-xe:1521/XEPDB1"
 username = "hr"
 password = "hr1234"
 
@@ -14,18 +14,21 @@ password = "hr1234"
 def get_employees():
     conn = cx_Oracle.connect(username, password, dsn)
     cursor = conn.cursor()
-    cursor.execute("SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME FROM EMPLOYEES FETCH FIRST 5 ROWS ONLY")
+    cursor.execute("SELECT FIRST_NAME, LAST_NAME, EMPLOYEE_ID FROM EMPLOYEES FETCH FIRST 5 ROWS ONLY")
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
 
     # Convert to JSON
-    employees = [{"first_name": r[0], "last_name": r[1]} for r in rows]
+    employees = [
+        {"employee_id": r[2], "first_name": r[0], "last_name": r[1]}
+        for r in rows
+    ]
     return jsonify(employees)
 
 @app.route("/api/update_employee", methods=["POST"])
 def update_employee():
-    data = request.json  # Expect JSON: { "employee_id": 100, "first_name": "Orbs", "last_name": "Casido" }
+    data = request.json  
     emp_id = data.get("employee_id")
     first_name = data.get("first_name")
     last_name = data.get("last_name")

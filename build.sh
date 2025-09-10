@@ -9,5 +9,7 @@ docker rmi be fe || true
 docker build -t be be/ 
 docker build -t fe fe/ 
 
-docker run -d -p 5000:5000 --name be be
-docker run -d -p 80:80 --name fe fe
+#docker network create my-network
+
+docker run -d --name be --network my-network -p 5000:5000 be
+docker run -d --name fe --network my-network -p 80:80 fe

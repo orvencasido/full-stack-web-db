@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employees</title>
+</head>
+<body>
+  <h1>Employee List</h1>
+  <ul id="employee-list"></ul>
+
+  <script>
+    fetch("http://54.179.52.209:5000/api/employees")
+      .then(response => response.json())
+      .then(data => {
+        const list = document.getElementById("employee-list");
+        data.forEach(emp => {
+          const li = document.createElement("li");
+          li.textContent = emp.first_name + " " + emp.last_name;
+          list.appendChild(li);
+        });
+      });
+  </script>
+</body>
+</html>
